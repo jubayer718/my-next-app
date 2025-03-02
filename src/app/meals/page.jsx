@@ -1,16 +1,16 @@
-"use client"
-import { useEffect, useState } from "react";
+import MealsInputField from "./components/MealsInputField";
 
 
-const page = () => {
+const page =async ({ searchParams }) => {
 
-  const [meals, setMeals] = useState([]);
-  const [search, setSearch] = useState("");
-  const fetchMeals = async() => {
+
+  const query = await searchParams;
+  const fetchMeals = async () => {
+   
     try {
-      const res =await fetch(`https://www.themealdb.com/api/json/v1/1/search.php?s=${search}`)
+      const res =await fetch(`https://www.themealdb.com/api/json/v1/1/search.php?s=${query.search}`)
       const data = await res.json();
-      setMeals(data?.meals||[])
+      // setMeals(data?.meals||[])
       return data.meals;
     } catch(error) {
       console.log(error);
@@ -18,18 +18,13 @@ const page = () => {
     }
   }
 
-
-  useEffect(() => {
-    fetchMeals();
-  }, [search])
-  
+  const meals = await fetchMeals()||[];
 
   return (
     <div>
 
       <div className="flex justify-center my-12">
-        input:
-        <input className="text-black" value={search} onChange={(e)=>setSearch(e.target.value)} type="text" />
+       <MealsInputField></MealsInputField>
 </div>
 
         <div className="grid grid-cols-4 gap-4  ">
